@@ -87,20 +87,55 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
     var modOscGain = audioContext.createGain();
     var amOscGain = audioContext.createGain();
 
+    var mainGain = audioContext.createGain();
+
     modOsc.connect(modOscGain);
     amOsc.connect(amOscGain);
 
-    var carrierEnv = new paramEAD(audioContext, 0.9, 0.9, carrierOsc.frequency, 300, 3000);
-    var modEnv = new paramEAD(audioContext, 0.9, 0.9, modOsc.frequency, 500, 3000);
-    var amEvn = new paramEAD(audioContext, 0.9, 0.9, amOsc.frequency, 100, 3000);
+
+    // Envelopes
+    // 0-1 -> * 0.9
+    //modOscGain.gain -$0-amp1
+    //modOsc.frequency -$0-frq1
+    //amOscGain.gain -$0-amp2
+    //amOsc.frequency -$0-frq2
+
+    // Inputs
+    //carrierOsc.frequency $0-ifrq
+    //mainEnv.attackTimeT60
+    //mainEnv.decayTimeT60
+
+    //modEnv.attackTimeT60
+    //modEnv.decayTimeT60
+    //modEnv.max
+
+    //modEnv.attackTimeT60
+    //modEnv.decayTimeT60
+    //modEnv.max
+
+    //amEvn.attackTimeT60
+    //amEvn.decayTimeT60
+    //amEvn.max
+
+    //mGainEnv.attackTimeT60
+    //mGainEnv.decayTimeT60
+    //mGainEnv.max
+
+    //amGainEnv.attackTimeT60
+    //amGainEnv.decayTimeT60
+    //amGainEnv.max
+
+
+    var mainEnv = new paramEAD(audioContext, 0.9, 0.9, mainGain.frequency, 0, 3000);
+    var modEnv = new paramEAD(audioContext, 0.9, 0.9, modOsc.frequency, 0, 3000);
+    var amEvn = new paramEAD(audioContext, 0.9, 0.9, amOsc.frequency, 0, 3000);
+    var mGainEnv = new paramEAD(audioContext, 0.9, 0.9, modOscGain.gain, 0, 1);
+    var amGainEnv = new paramEAD(audioContext, 0.9, 0.9, amOscGain.gain, 0, 1);
 
     var fm = new fmSynth(audioContext, carrierOsc, modOscGain);
     var am = new amSynth(audioContext, fm, amOscGain);
-    am.connect(audioContext.destination);
-
-    window.setInterval(function (){
-      console.log(carrierOsc.frequency.value);
-    }, 200);
+    am.connect(mainGain);
+    mainGain.connect(audioContext.destination);
 
 
     window.addEventListener("load",  function(){
@@ -129,11 +164,12 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
       });
 
       trigButton.addEventListener('click', function (){
-        carrierEnv.trigger();
         modEnv.trigger();
         amEvn.trigger();
+        mGainEnv.trigger();
+        amGainEnv.trigger();
       });
 
     });
 
-    console.log("world");
+console.log("world");
