@@ -54,7 +54,7 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
       this.attackTimeT60 = attackTimeT60 || 0.9;
       this.decayTimeT60 = decayTimeT60 || 0.9;
 
-      console.log("a = " + this.attackTimeT60 + "  b = " + this.decayTimeT60);
+      //console.log("a = " + this.attackTimeT60 + "  b = " + this.decayTimeT60);
 
 
       this.min = min || 0;
@@ -158,41 +158,45 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
     var am = new amSynth(audioContext, fm, amOscGain);
     am.connect(mainGain);
     mainGain.connect(audioContext.destination);
-    mainGain.gain.value = 0.1;
+    mainGain.gain.value = 0;
+
+    carrierOsc.start(0);
+    modOsc.start(0);
+    amOsc.start(0);
 
     window.addEventListener("load",  function(){
-      var playButton=document.getElementById("playButton");
-      var carrierSlider=document.getElementById("carrierSlider");
-      var modSlider=document.getElementById("modulatorSlider");
-      var gainSlider=document.getElementById("modGain");
+      // var playButton=document.getElementById("playButton");
+      // var carrierSlider=document.getElementById("carrierSlider");
+      // var modSlider=document.getElementById("modulatorSlider");
+      // var gainSlider=document.getElementById("modGain");
       var trigButton=document.getElementById("triggerButton");
 
-      playButton.addEventListener('click', function (){
-        carrierOsc.start(0);
-        modOsc.start(0);
-        amOsc.start(0);
-      });
 
-      carrierSlider.addEventListener('change', function(){
-        //carrierOsc.frequency.value = carrierSlider.value;
-      });
 
-      modSlider.addEventListener('change', function(){
-        //modOsc.frequency.value = modSlider.value;
-      });
+      // playButton.addEventListener('click', function (){
 
-      gainSlider.addEventListener('change', function(){
-        //amOsc.frequency.value = gainSlider.value;
-      });
+      // });
+
+      // carrierSlider.addEventListener('change', function(){
+      //   //carrierOsc.frequency.value = carrierSlider.value;
+      // });
+
+      // modSlider.addEventListener('change', function(){
+      //   //modOsc.frequency.value = modSlider.value;
+      // });
+
+      // gainSlider.addEventListener('change', function(){
+      //   //amOsc.frequency.value = gainSlider.value;
+      // });
 
       trigButton.addEventListener('click', function (){
+        console.log('chirrrrp');
         mainEnv.trigger();
         modEnv.trigger();
         amEvn.trigger();
         mGainEnv.trigger();
         amGainEnv.trigger();
       });
+      console.log("world");
 
     });
-
-console.log("world");
