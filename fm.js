@@ -1,6 +1,7 @@
 console.log("hello");
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var FADE_OUT_TIME = 1;
 
 function fmSynth(audioContext, carrier, modulator, modGain){
   // this.modulatorGain.gain
@@ -12,7 +13,7 @@ function fmSynth(audioContext, carrier, modulator, modGain){
       toString: function () {
         return this.name + ": " + this.message;
       }
-    }
+    };
   }
 
   carrier = carrier || audioContext.createOscillator();
@@ -34,7 +35,6 @@ function amSynth(audioContext, node1, node2){
   var amGain = audioContext.createGain();
 
   node1.connect(amGain);
-  amGain.connect(audioContext.destination);
   node2.connect(amGain.gain);
 
   this.connect = function(audioNode){
@@ -54,17 +54,21 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
       this.attackTimeT60 = attackTimeT60 || 0.9;
       this.decayTimeT60 = decayTimeT60 || 0.9;
 
+      console.log("a = " + this.attackTimeT60 + "  b = " + this.decayTimeT60);
+
+
       this.min = min || 0;
       this.max = max || 3000;
 
-      var t60multiplier = 6.90776;
+      var t60multiplier = 1.90776;
 
       this.trigger = function(){
         var value = param.value;
         param.cancelScheduledValues(audioContext.currentTime);
-        param.setValueAtTime(this.min,audioContext.currentTime);
+        param.setValueAtTime(this.min, audioContext.currentTime);
         param.setTargetAtTime(this.max, audioContext.currentTime, this.attackTimeT60);
-        param.setTargetAtTime(this.min, audioContext.currentTime+(this.attackTimeT60/6.90776), this.decayTimeT60);
+        param.setTargetAtTime(this.min, audioContext.currentTime+(this.attackTimeT60/t60multiplier), this.decayTimeT60);
+        param.setValueAtTime(this.min, audioContext.currentTime+ (this.attackTimeT60/t60multiplier) + (this.decayTimeT60/t60multiplier) + FADE_OUT_TIME) ;
       };
     }
 
@@ -125,18 +129,36 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
     //amGainEnv.decayTimeT60
     //amGainEnv.max
 
+    //lesser-spotted-grinchwarbler
+    var ifrq = 0.55102;// ifrq
+    var atk = 0.591837;//  atk
+    var dcy = 0.187755;//  dcy
+    var fmod1 = 0.0716327;// fmod1
+    var atkf1 = 0.0204082;// atkf1
+    var dcyf1 = 0.346939;//  dcyf1
+    var fmod2 = 0.0204082;// fmod2
+    var atkf2 = 0.55102;// atkf2
+    var dcyf2 = 0.122449;//  dcyf2
+    var amod1 = 0.632653;//  amod1
+    var atka1 = 1;// atka1
+    var dcya1 = 0.612245;//  dcya1
+    var amod2 = 0.346939;//  amod2
+    var atka2 = 0.816327;//  atka2
+    var dcya2 = 0.653061;//  dcya2
 
-    var mainEnv = new paramEAD(audioContext, 0.9, 0.9, mainGain.frequency, 0, 3000);
-    var modEnv = new paramEAD(audioContext, 0.9, 0.9, modOsc.frequency, 0, 3000);
-    var amEvn = new paramEAD(audioContext, 0.9, 0.9, amOsc.frequency, 0, 3000);
-    var mGainEnv = new paramEAD(audioContext, 0.9, 0.9, modOscGain.gain, 0, 1);
-    var amGainEnv = new paramEAD(audioContext, 0.9, 0.9, amOscGain.gain, 0, 1);
+    carrierOsc.frequency.value = ifrq*7000+300;
+    var mainEnv = new paramEAD(audioContext, 0.9*atk, 0.9*dcy, mainGain.gain, 0, 1);
+    var mGainEnv = new paramEAD(audioContext, 0.9*atka1, 0.9*dcya1, modOscGain.gain, 0, 1*amod1);
+    var amGainEnv = new paramEAD(audioContext, 0.9*atka2, 0.9*dcya2, amOscGain.gain, 0, 1*amod2);
+    var modEnv = new paramEAD(audioContext, 0.9*atkf1, 0.9*dcyf1, modOsc.frequency, 0, 3000*fmod1);
+    var amEvn = new paramEAD(audioContext, 0.9*atkf2, 0.9*dcyf2, amOsc.frequency, 0, 3000*fmod2);
 
-    var fm = new fmSynth(audioContext, carrierOsc, modOscGain);
+
+    var fm = new fmSynth(audioContext, carrierOsc, modOscGain, ifrq*7000+300);
     var am = new amSynth(audioContext, fm, amOscGain);
     am.connect(mainGain);
     mainGain.connect(audioContext.destination);
-
+    mainGain.gain.value = 0.1;
 
     window.addEventListener("load",  function(){
       var playButton=document.getElementById("playButton");
@@ -152,18 +174,19 @@ function paramEAD(audioContext, attackTimeT60, decayTimeT60, param, min, max){
       });
 
       carrierSlider.addEventListener('change', function(){
-        carrierOsc.frequency.value = carrierSlider.value;
+        //carrierOsc.frequency.value = carrierSlider.value;
       });
 
       modSlider.addEventListener('change', function(){
-        modOsc.frequency.value = modSlider.value;
+        //modOsc.frequency.value = modSlider.value;
       });
 
       gainSlider.addEventListener('change', function(){
-        amOsc.frequency.value = gainSlider.value;
+        //amOsc.frequency.value = gainSlider.value;
       });
 
       trigButton.addEventListener('click', function (){
+        mainEnv.trigger();
         modEnv.trigger();
         amEvn.trigger();
         mGainEnv.trigger();
