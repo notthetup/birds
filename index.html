@@ -11,10 +11,19 @@
 <input id="carrierSlider" type="range"  value="500" min="0" max="5000"/>
 <input id="modulatorSlider" type="range"  value="10" min="0" max="5000"/>
 <input id="modGain" type="range"  value="10" min="0" max="5000"/>
- -->
- <button id="triggerButton">Chirrrp</button>
+-->
+<button id="triggerButton">Chirrrp</button>
 
 
 <body>
-	<script src="fm.js"></script>
+	<script src="bird.js"></script>
+	<script>
+		window.addEventListener("load",  function(){
+			var mybird = new bird();
+			var trigButton=document.getElementById("triggerButton");
+			trigButton.addEventListener('click', function (){
+				mybird.chirp();
+			});
+		});
+	</script>
 </body>
