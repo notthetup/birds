@@ -6,6 +6,8 @@ function bird (type,audioContext){
     audioContext = new AudioContext();
   }
 
+  this.frequency = 7300;
+
   var presets = generatePresets();
 
   // Create Oscillators
@@ -28,10 +30,10 @@ function bird (type,audioContext){
 
   // Create control envelopes
   var mainEnv = new paramEAD(audioContext, mainGain.gain);
-  var mGainEnv = new paramEAD(audioContext,  modOscGain.gain);
-  var amGainEnv = new paramEAD(audioContext, amOscGain.gain);
   var modEnv = new paramEAD(audioContext, modOsc.frequency);
   var amEvn = new paramEAD(audioContext, amOsc.frequency);
+  var mGainEnv = new paramEAD(audioContext,  modOscGain.gain);
+  var amGainEnv = new paramEAD(audioContext, amOscGain.gain);
 
   params = presets[type] || presets["lesser-spotted-grinchwarbler"];
 
@@ -40,8 +42,10 @@ function bird (type,audioContext){
   var freqMultiplier = 7000;
   var freqOffset = 300;
   var envFreqMultiplier = 3000;
+  this.frequency = freqOffset + freqMultiplier*params[0];
 
-  carrierOsc.frequency.value = freqOffset + freqMultiplier*params[0];//ifrq;
+  fm.modulatorGain.gain.value = this.frequency;
+  carrierOsc.frequency.value = this.frequency;//ifrq;
   mainEnv.attackTime = maxAttackDecayTime*params[1]; //atk;
   mainEnv.decayTime = maxAttackDecayTime*params[2]; //dcy;
 
@@ -72,13 +76,15 @@ function bird (type,audioContext){
   modOsc.start(0);
   amOsc.start(0);
 
-  this.chirp = function (){
+  this.chirp = function (time){
     console.log('chirrrrp');
-    mainEnv.trigger();
-    modEnv.trigger();
-    amEvn.trigger();
-    mGainEnv.trigger();
-    amGainEnv.trigger();
+    fm.modulatorGain.gain.value = this.frequency;
+    carrierOsc.frequency.value = this.frequency
+    mainEnv.trigger(time);
+    modEnv.trigger(time);
+    amEvn.trigger(time);
+    mGainEnv.trigger(time);
+    amGainEnv.trigger(time);
   };
 
   this.connect = function(output){
@@ -142,15 +148,17 @@ function paramEAD(audioContext, param, attackTime, decayTime, min, max){
   this.decayTime = decayTime || 0.9;
 
   this.min = min || 0;
-  this.max = max || 3000;
+  this.max = max || 1;
 
-  this.trigger = function(){
+  this.trigger = function(time){
+    var startTime = audioContext.currentTime + (time || 0);
+    //console.log(startTime);
     var value = param.value;
-    param.cancelScheduledValues(audioContext.currentTime);
-    param.setValueAtTime(this.min, audioContext.currentTime);
-    param.setTargetAtTime(this.max, audioContext.currentTime, this.attackTime);
-    param.setTargetAtTime(this.min, audioContext.currentTime+(this.attackTime/t60multiplier), this.decayTime);
-    param.setValueAtTime(this.min, audioContext.currentTime+ (this.attackTime/t60multiplier) + (this.decayTime/t60multiplier) + FADE_OUT_TIME) ;
+    param.cancelScheduledValues(startTime);
+    param.setValueAtTime(this.min, startTime);
+    param.setTargetAtTime(this.max, startTime, this.attackTime);
+    param.setTargetAtTime(this.min, startTime + (this.attackTime/t60multiplier), this.decayTime);
+    param.setValueAtTime(this.min, startTime + (this.attackTime/t60multiplier) + (this.decayTime/t60multiplier) + FADE_OUT_TIME) ;
   };
 }
 
@@ -167,5 +175,5 @@ function generatePresets(){
                                                                     0.0204082,  0.55102, 0.122449,
                                                                     0.632653, 1, 0.612245,
                                                                     0.346939, 0.816327, 0.653061];
-  return  presets;
+  return  presets  ;
 }

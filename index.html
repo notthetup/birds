@@ -19,10 +19,14 @@
 	<script src="bird.js"></script>
 	<script>
 		window.addEventListener("load",  function(){
-			var mybird = new bird();
+			var birds = [new bird(), new bird(), new bird(), new bird()];
+			var count = 0;
 			var trigButton=document.getElementById("triggerButton");
 			trigButton.addEventListener('click', function (){
-				mybird.chirp();
+				birds[count].frequency += ((Math.random()-0.5)*1200);
+				birds[count].chirp();
+				count = (count+1) % birds.length;
+				console.log(count);
 			});
 		});
 	</script>
