@@ -31,7 +31,7 @@
 			function makeCb(key) {
 				return function(a, up) {
 					if (key) params[key] = a;
-					if (up) chirp();
+					if (up) chirp(key);
 				};
 			}
 			for (var y = 0; y  < 5; y ++) {
@@ -67,10 +67,11 @@
 			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
 			var count = 0;
 			//var trigButton=document.getElementById("triggerButton");
-			function chirp(){
+			function chirp(caller){
 				var b = birds[count];
 				console.log(JSON.stringify(params, null, '\t' ));
-				if(check.value.v){
+				console.log(caller);
+				if(check.value.v && !caller){
 					params.ifrq = initifrq + (rnd_snd()*0.1);
 					frqKnob.value.v = params.ifrq;
 					frqKnob.draw();
