@@ -22,7 +22,9 @@
 
 			var ac;
 			window.AudioContext = window.AudioContext || window.webkitAudioContext;
-			if (window.AudioContext) ac = new AudioContext();
+			if (window.AudioContext){
+				ac = new AudioContext();
+			}
 
 			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
 			var count = 0;

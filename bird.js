@@ -44,17 +44,24 @@ function bird (audioContext, type){
   var freqOffset = 300;
   var envFreqMultiplier = 3000;
 
-  var me = this;
+  // Connect the AM output to destination
+  am.connect(mainGain);
+  mainGain.connect(audioContext.destination);
+
+  // Start the Oscillators
+  mainGain.gain.value = 0;
+  carrierOsc.start(0);
+  modOsc.start(0);
+  amOsc.start(0);
 
   this.update = function(params) {
 
-    me.frequency = freqOffset + freqMultiplier * params.ifrq;
+    this.frequency = freqOffset + freqMultiplier * params.ifrq;
 
-    fm.modulatorGain.gain.value = me.frequency;
-    carrierOsc.frequency.value = me.frequency;
+    fm.modulatorGain.gain.value = this.frequency;
+    carrierOsc.frequency.value = this.frequency;
     mainEnv.attackTime = maxAttackDecayTime*params.atk;
     mainEnv.decayTime = maxAttackDecayTime*params.dcy;
-
 
     modEnv.max = envFreqMultiplier*params.fmod1;
     modEnv.attackTime = maxAttackDecayTime*params.atkf1;
@@ -72,25 +79,10 @@ function bird (audioContext, type){
     amGainEnv.attackTime = maxAttackDecayTime*params.atka2;
     amGainEnv.decayTime = maxAttackDecayTime*params.dcya2;
 
-  }
-
-  this.update(params);
-
-
-  // Connect the AM output to destination
-  am.connect(mainGain);
-  mainGain.connect(audioContext.destination);
-
-  // Start the Oscillators
-  mainGain.gain.value = 0;
-  carrierOsc.start(0);
-  modOsc.start(0);
-  amOsc.start(0);
+  };
 
   this.chirp = function (time){
     console.log('chirrrrp');
-    fm.modulatorGain.gain.value = me.frequency;
-    carrierOsc.frequency.value = me.frequency
     mainEnv.trigger(time);
     modEnv.trigger(time);
     amEvn.trigger(time);
@@ -102,6 +94,9 @@ function bird (audioContext, type){
     mainGain.disconnect();
     mainGain.connect(output);
   };
+
+
+  this.update(params);
 
 }
 
@@ -176,11 +171,6 @@ function paramEAD(audioContext, param, attackTime, decayTime, min, max){
 
 function generatePresets(){
   presets = {};
-  // ifrq, atk, dcy
-  // fmod1, atkf1, dckf1
-  // fmod2, atkf2, dckf2
-  // amod1, atka1, dcya1
-  // amod2, atka2, dcya2
 
   presets["lesser-spotted-grinchwarbler"] = {
     "ifrq": 0.55102,

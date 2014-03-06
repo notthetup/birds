@@ -38,7 +38,7 @@
 					key = pk[i];
 
 					knob = new gui.Knob( {x: x * 100 + 80, y: y * 100 + 40, radius: 25, value: params[key], min: 0, max: 1, decimals: 7 } );
-					
+
 					// knob.value.bind(params, key + ''); // does't seem to be working?
 
 					knob.value.bind(makeCb(key));
@@ -49,7 +49,7 @@
 				}
 			}
 
-			
+
 
 			document.body.appendChild( gui.getDomElement() );
 
@@ -58,7 +58,6 @@
 			if (window.AudioContext) ac = new AudioContext();
 
 			b = new bird(ac);
-			b.frequency = 7700; 
 
 			var trigButton=document.getElementById("triggerButton");
 			function chirp(){
