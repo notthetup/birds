@@ -19,7 +19,12 @@
 	<script src="bird.js"></script>
 	<script>
 		window.addEventListener("load",  function(){
-			var birds = [new bird(), new bird(), new bird(), new bird()];
+
+			var ac;
+			window.AudioContext = window.AudioContext || window.webkitAudioContext;
+			if (window.AudioContext) ac = new AudioContext();
+
+			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
 			var count = 0;
 			var trigButton=document.getElementById("triggerButton");
 			trigButton.addEventListener('click', function (){

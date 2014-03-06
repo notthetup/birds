@@ -1,9 +1,10 @@
 
 
-function bird (type,audioContext){
-  if (! audioContext){
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioContext = new AudioContext();
+function bird (audioContext, type){
+
+  if (!audioContext) {
+    console.error('AudioContext is required!')
+    return;
   }
 
   this.frequency = 7300;
