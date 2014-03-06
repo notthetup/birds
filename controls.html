@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Chirrrrp</title>
+
+</head>
+
+<button id="triggerButton">Chirrrp</button>
+
+
+<body>
+	<script src="bird.js"></script>
+	<script src="xgui.js"></script>
+	<script>
+		window.addEventListener("load",  function(){
+
+			// var
+			gui = new xgui( {width: 640, height: 660, backgroundColor: "rgb(65, 104, 137)", frontColor: "rgb(153, 193, 226)", dimColor: "rgb(90, 137, 177)"} );
+
+			var pk = ['ifrq', 'atk', 'dcy', 'fmod1', 'atkf1', 'dcyf1', 'fmod2', 'atkf2', 'dcyf2', 'amod1', 'atka1', 'dcya1', 'amod2', 'atka2', 'dcya2'];
+
+			params = generatePresets()['lesser-spotted-grinchwarbler'];
+			console.log(params);
+
+			var knob, key;
+			var i = 0;
+
+			function makeCb(key) {
+				return function(a, up) {
+					params[key] = a;
+					if (up) chirp();
+				}
+			}
+			for (var y = 0; y  < 5; y ++) {
+				for (var x = 0; x < 3; x ++ ) {
+					key = pk[i];
+
+					knob = new gui.Knob( {x: x * 100 + 80, y: y * 100 + 40, radius: 25, value: params[key], min: 0, max: 1, decimals: 7 } );
+					
+					// knob.value.bind(params, key + ''); // does't seem to be working?
+
+					knob.value.bind(makeCb(key));
+
+					new gui.Label( {x: x * 100 + 80, y: y * 100 + 105, text: key} );
+
+					i++;
+				}
+			}
+
+			
+
+			document.body.appendChild( gui.getDomElement() );
+
+			var ac;
+			window.AudioContext = window.AudioContext || window.webkitAudioContext;
+			if (window.AudioContext) ac = new AudioContext();
+
+			b = new bird(ac);
+			b.frequency = 7700; 
+
+			var trigButton=document.getElementById("triggerButton");
+			function chirp(){
+				console.log(JSON.stringify(params, null, '\t' ));
+				b.update(params);
+				b.chirp()
+			}
+			trigButton.addEventListener('click', chirp);
+		});
+	</script>
+</body>

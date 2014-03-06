@@ -1,9 +1,10 @@
 
 
-function bird (type,audioContext){
-  if (! audioContext){
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioContext = new AudioContext();
+function bird (audioContext, type){
+
+  if (!audioContext) {
+    console.error('AudioContext is required!')
+    return;
   }
 
   this.frequency = 7300;
@@ -42,28 +43,38 @@ function bird (type,audioContext){
   var freqMultiplier = 7000;
   var freqOffset = 300;
   var envFreqMultiplier = 3000;
-  this.frequency = freqOffset + freqMultiplier*params[0];
 
-  fm.modulatorGain.gain.value = this.frequency;
-  carrierOsc.frequency.value = this.frequency;//ifrq;
-  mainEnv.attackTime = maxAttackDecayTime*params[1]; //atk;
-  mainEnv.decayTime = maxAttackDecayTime*params[2]; //dcy;
+  var me = this;
 
-  modEnv.max = envFreqMultiplier*params[3]; //fmod1;
-  modEnv.attackTime = maxAttackDecayTime*params[4]; //atkf1;
-  modEnv.decayTime = maxAttackDecayTime*params[5]; //dcyf1;
+  this.update = function(params) {
 
-  amEvn.max = envFreqMultiplier*params[6]; //fmod2;
-  amEvn.attackTime = maxAttackDecayTime*params[7]; //atkf2;
-  amEvn.decayTime = maxAttackDecayTime*params[8]; //dcyf2;
+    me.frequency = freqOffset + freqMultiplier * params.ifrq;
 
-  mGainEnv.max = params[9];//amod1;
-  mGainEnv.attackTime = maxAttackDecayTime*params[10]; //atka1;
-  mGainEnv.decayTime = maxAttackDecayTime*params[11]; //dcya1;
+    fm.modulatorGain.gain.value = me.frequency;
+    carrierOsc.frequency.value = me.frequency;
+    mainEnv.attackTime = maxAttackDecayTime*params.atk;
+    mainEnv.decayTime = maxAttackDecayTime*params.dcy;
 
-  amGainEnv.max = params[12]; //amod2;
-  amGainEnv.attackTime = maxAttackDecayTime*params[13]; //atka2;
-  amGainEnv.decayTime = maxAttackDecayTime*params[14]; //dcya2;
+
+    modEnv.max = envFreqMultiplier*params.fmod1;
+    modEnv.attackTime = maxAttackDecayTime*params.atkf1;
+    modEnv.decayTime = maxAttackDecayTime*params.dcyf1;
+
+    amEvn.max = envFreqMultiplier*params.fmod2;
+    amEvn.attackTime = maxAttackDecayTime*params.atkf2;
+    amEvn.decayTime = maxAttackDecayTime*params.dcyf2;
+
+    mGainEnv.max = params.amod1;
+    mGainEnv.attackTime = maxAttackDecayTime*params.atka1;
+    mGainEnv.decayTime = maxAttackDecayTime*params.dcya1;
+
+    amGainEnv.max = params.amod2;
+    amGainEnv.attackTime = maxAttackDecayTime*params.atka2;
+    amGainEnv.decayTime = maxAttackDecayTime*params.dcya2;
+
+  }
+
+  this.update(params);
 
 
   // Connect the AM output to destination
@@ -78,8 +89,8 @@ function bird (type,audioContext){
 
   this.chirp = function (time){
     console.log('chirrrrp');
-    fm.modulatorGain.gain.value = this.frequency;
-    carrierOsc.frequency.value = this.frequency
+    fm.modulatorGain.gain.value = me.frequency;
+    carrierOsc.frequency.value = me.frequency
     mainEnv.trigger(time);
     modEnv.trigger(time);
     amEvn.trigger(time);
@@ -170,10 +181,24 @@ function generatePresets(){
   // fmod2, atkf2, dckf2
   // amod1, atka1, dcya1
   // amod2, atka2, dcya2
-  presets["lesser-spotted-grinchwarbler"] = [0.55102, 0.591837, 0.187755,
-                                                                    0.0716327, 0.0204082, 0.346939,
-                                                                    0.0204082,  0.55102, 0.122449,
-                                                                    0.632653, 1, 0.612245,
-                                                                    0.346939, 0.816327, 0.653061];
-  return  presets  ;
+
+  presets["lesser-spotted-grinchwarbler"] = {
+    "ifrq": 0.55102,
+    "atk": 0.591837,
+    "dcy": 0.187755,
+    "fmod1": 0.0716327,
+    "atkf1": 0.0204082,
+    "dcyf1": 0.346939,
+    "fmod2": 0.0204082,
+    "atkf2": 0.55102,
+    "dcyf2": 0.122449,
+    "amod1": 0.632653,
+    "atka1": 1,
+    "dcya1": 0.612245,
+    "amod2": 0.346939,
+    "atka2": 0.816327,
+    "dcya2": 0.653061
+  };
+
+  return  presets;
 }
