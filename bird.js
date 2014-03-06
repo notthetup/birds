@@ -43,30 +43,38 @@ function bird (audioContext, type){
   var freqMultiplier = 7000;
   var freqOffset = 300;
   var envFreqMultiplier = 3000;
-  this.frequency = freqOffset + freqMultiplier * params.ifrq; //ifrq;
 
-  fm.modulatorGain.gain.value = this.frequency;
-  carrierOsc.frequency.value = this.frequency;
-  mainEnv.attackTime = maxAttackDecayTime*params.atk;
-  mainEnv.decayTime = maxAttackDecayTime*params.dcy;
+  var me = this;
+
+  this.update = function(params) {
+
+    me.frequency = freqOffset + freqMultiplier * params.ifrq;
+
+    fm.modulatorGain.gain.value = me.frequency;
+    carrierOsc.frequency.value = me.frequency;
+    mainEnv.attackTime = maxAttackDecayTime*params.atk;
+    mainEnv.decayTime = maxAttackDecayTime*params.dcy;
 
 
+    modEnv.max = envFreqMultiplier*params.fmod1;
+    modEnv.attackTime = maxAttackDecayTime*params.atkf1;
+    modEnv.decayTime = maxAttackDecayTime*params.dcyf1;
 
-  modEnv.max = envFreqMultiplier*params.fmod1;
-  modEnv.attackTime = maxAttackDecayTime*params.atkf1;
-  modEnv.decayTime = maxAttackDecayTime*params.dcyf1;
+    amEvn.max = envFreqMultiplier*params.fmod2;
+    amEvn.attackTime = maxAttackDecayTime*params.atkf2;
+    amEvn.decayTime = maxAttackDecayTime*params.dcyf2;
 
-  amEvn.max = envFreqMultiplier*params.fmod2;
-  amEvn.attackTime = maxAttackDecayTime*params.atkf2;
-  amEvn.decayTime = maxAttackDecayTime*params.dcyf2;
+    mGainEnv.max = params.amod1;
+    mGainEnv.attackTime = maxAttackDecayTime*params.atka1;
+    mGainEnv.decayTime = maxAttackDecayTime*params.dcya1;
 
-  mGainEnv.max = params.amod1;
-  mGainEnv.attackTime = maxAttackDecayTime*params.atka1;
-  mGainEnv.decayTime = maxAttackDecayTime*params.dcya1;
+    amGainEnv.max = params.amod2;
+    amGainEnv.attackTime = maxAttackDecayTime*params.atka2;
+    amGainEnv.decayTime = maxAttackDecayTime*params.dcya2;
 
-  amGainEnv.max = params.amod2;
-  amGainEnv.attackTime = maxAttackDecayTime*params.atka2;
-  amGainEnv.decayTime = maxAttackDecayTime*params.dcya2;
+  }
+
+  this.update(params);
 
 
   // Connect the AM output to destination
@@ -81,8 +89,8 @@ function bird (audioContext, type){
 
   this.chirp = function (time){
     console.log('chirrrrp');
-    fm.modulatorGain.gain.value = this.frequency;
-    carrierOsc.frequency.value = this.frequency
+    fm.modulatorGain.gain.value = me.frequency;
+    carrierOsc.frequency.value = me.frequency
     mainEnv.trigger(time);
     modEnv.trigger(time);
     amEvn.trigger(time);
