@@ -3,11 +3,9 @@
 function bird (audioContext, type){
 
   if (!audioContext) {
-    console.error('AudioContext is required!')
+    console.error('AudioContext is required!');
     return;
   }
-
-  this.frequency = 7300;
 
   var presets = generatePresets();
 
@@ -56,10 +54,10 @@ function bird (audioContext, type){
 
   this.update = function(params) {
 
-    this.frequency = freqOffset + freqMultiplier * params.ifrq;
+    //  console.log(params);
 
-    fm.modulatorGain.gain.value = this.frequency;
-    carrierOsc.frequency.value = this.frequency;
+    fm.modulatorGain.gain.value = freqOffset + freqMultiplier * params.ifrq;
+    carrierOsc.frequency.value = freqOffset + freqMultiplier * params.ifrq;
     mainEnv.attackTime = maxAttackDecayTime*params.atk;
     mainEnv.decayTime = maxAttackDecayTime*params.dcy;
 

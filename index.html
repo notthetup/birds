@@ -7,34 +7,83 @@
 
 </head>
 
-<!-- <button id="playButton">Play</button>
-<input id="carrierSlider" type="range"  value="500" min="0" max="5000"/>
-<input id="modulatorSlider" type="range"  value="10" min="0" max="5000"/>
-<input id="modGain" type="range"  value="10" min="0" max="5000"/>
--->
-<button id="triggerButton">Chirrrp</button>
+<!-- <button id="triggerButton">Chirrrp</button> -->
 
 
 <body>
 	<script src="bird.js"></script>
+	<script src="xgui.js"></script>
 	<script>
 		window.addEventListener("load",  function(){
 
+			// var
+			gui = new xgui( {width: 640, height: 660, backgroundColor: "rgb(65, 104, 137)", frontColor: "rgb(153, 193, 226)", dimColor: "rgb(90, 137, 177)"} );
+
+			var pk = ['ifrq', 'atk', 'dcy', 'fmod1', 'atkf1', 'dcyf1', 'fmod2', 'atkf2', 'dcyf2', 'amod1', 'atka1', 'dcya1', 'amod2', 'atka2', 'dcya2'];
+
+			params = generatePresets()['lesser-spotted-grinchwarbler'];
+			var initifrq = params.ifrq;
+
+			var frqKnob;
+			var knob, key;
+			var i = 0;
+
+			function makeCb(key) {
+				return function(a, up) {
+					if (key) params[key] = a;
+					if (up) chirp();
+				};
+			}
+			for (var y = 0; y  < 5; y ++) {
+				for (var x = 0; x < 3; x ++ ) {
+					key = pk[i];
+
+					knob = new gui.Knob( {x: x * 100 + 80, y: y * 100 + 70, radius: 25, value: params[key], min: 0, max: 1, decimals: 7 } );
+
+					if (key == "ifrq"){
+						frqKnob = knob;
+					}
+
+					knob.value.bind(makeCb(key));
+
+					new gui.Label( {x: x * 100 + 80, y: y * 100 + 135, text: key} );
+
+					i++;
+				}
+			}
+
+			var button = new gui.Button({x: 90+100, y: 5, radius: 25, text: "Chirp", height: 20});
+
+			var check = new gui.CheckBox( {x: 90+100+100, y: 5, text: "Randomize ifrq",width:20,  height: 20} );
+
+			button.value.bind(makeCb(null));
+
+			document.body.appendChild( gui.getDomElement() );
+
 			var ac;
 			window.AudioContext = window.AudioContext || window.webkitAudioContext;
-			if (window.AudioContext){
-				ac = new AudioContext();
-			}
+			if (window.AudioContext) ac = new AudioContext();
 
 			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
 			var count = 0;
-			var trigButton=document.getElementById("triggerButton");
-			trigButton.addEventListener('click', function (){
-				birds[count].frequency += ((Math.random()-0.5)*1200);
-				birds[count].chirp();
+			//var trigButton=document.getElementById("triggerButton");
+			function chirp(){
+				var b = birds[count];
+				console.log(JSON.stringify(params, null, '\t' ));
+				if(check.value.v){
+					params.ifrq = initifrq + (rnd_snd()*0.1);
+					frqKnob.value.v = params.ifrq;
+					frqKnob.draw();
+				}
+				b.update(params);
+				b.chirp();
 				count = (count+1) % birds.length;
-				//console.log(count);
-			});
+			}
+
+
+			function rnd_snd() {
+				return (Math.random()*2-1)+(Math.random()*2-1)+(Math.random()*2-1);
+			}
 		});
 	</script>
 </body>
