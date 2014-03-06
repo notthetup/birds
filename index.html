@@ -2,7 +2,9 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<title>Chirrrrp</title>
 
 </head>
@@ -21,8 +23,17 @@
 
 			var pk = ['ifrq', 'atk', 'dcy', 'fmod1', 'atkf1', 'dcyf1', 'fmod2', 'atkf2', 'dcyf2', 'amod1', 'atka1', 'dcya1', 'amod2', 'atka2', 'dcya2'];
 
-			params = generatePresets()['long-toed-mudhopper'];
+			var presets = generatePresets();
+			var options = Object.keys(presets);
+			var params = presets['long-toed-mudhopper'];
 			var initifrq = params.ifrq;
+
+			var dropdown = new gui.DropDown( {x: 30, y: 5, height:20, width:148, values:options , texts:options } );
+
+			dropdown.value.bind(function(key){
+				params = presets[key];
+				initifrq = params.ifrq;
+			});
 
 			var frqKnob;
 			var knob, key;
