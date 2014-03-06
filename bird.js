@@ -46,12 +46,6 @@ function bird (audioContext, type){
   am.connect(mainGain);
   mainGain.connect(audioContext.destination);
 
-  // Start the Oscillators
-  mainGain.gain.value = 0;
-  carrierOsc.start(0);
-  modOsc.start(0);
-  amOsc.start(0);
-
   this.update = function(params) {
 
     //  console.log(params);
@@ -80,6 +74,14 @@ function bird (audioContext, type){
   };
 
   this.chirp = function (time){
+    // Start the Oscillators
+    if (carrierOsc.playbackState == carrierOsc.UNSCHEDULED_STATE){
+      mainGain.gain.value = 0;
+      carrierOsc.start(0);
+      modOsc.start(0);
+      amOsc.start(0);
+    }
+
     console.log('chirrrrp');
     mainEnv.trigger(time);
     modEnv.trigger(time);

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
 	<title>Chirrrrp</title>
 
 </head>
@@ -70,7 +70,7 @@
 			function chirp(caller){
 				var b = birds[count];
 				console.log(JSON.stringify(params, null, '\t' ));
-				console.log(caller);
+				//console.log(caller);
 				if(check.value.v && !caller){
 					params.ifrq = initifrq + (rnd_snd()*0.1);
 					frqKnob.value.v = params.ifrq;
