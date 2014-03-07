@@ -33,11 +33,18 @@
 			dropdown.value.bind(function(key){
 				params = presets[key];
 				initifrq = params.ifrq;
+				for (key in params) {
+					knob = knobs[key];
+					knob.value.v = params[key];
+					knob.draw();
+				}
+				chirp()
 			});
 
 			var frqKnob;
 			var knob, key;
 			var i = 0;
+			var knobs = {};
 
 			function makeCb(key) {
 				return function(a, up) {
@@ -45,6 +52,7 @@
 					if (up) chirp(key);
 				};
 			}
+
 			for (var y = 0; y  < 5; y ++) {
 				for (var x = 0; x < 3; x ++ ) {
 					key = pk[i];
@@ -54,6 +62,8 @@
 					if (key == "ifrq"){
 						frqKnob = knob;
 					}
+
+					knobs[key] = knob;
 
 					knob.value.bind(makeCb(key));
 
