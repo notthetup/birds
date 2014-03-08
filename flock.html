@@ -41,25 +41,34 @@
 			window.AudioContext = window.AudioContext || window.webkitAudioContext;
 			if (window.AudioContext) ac = new AudioContext();
 
-			var birds = new flock(ac, 5);
-			birds.position = {x:-100,y:0, z:5};
-			birds.velocity = {x:10, y:0, z:0};
+			var flocks = [new flock(ac, 5), new flock(ac, 5), new flock(ac, 5), new flock(ac, 5)];
+			flocks.forEach(function(flock){
+				flock.position = {x:-100,y:0, z:5};
+				flock.velocity = {x:10, y:0, z:0};
+			});
 
 			var increment = 10;
+			var zPos = 5;
+			var xVel = 10;
+			var count = 0;
 
 			window.setInterval(function(){
 				if (running){
-					birds.position.x += increment;
+					var birds = flocks[count++];
 					if (birds.position.x > 100){
 						increment = -10;
-						birds.position.z = 20;
-						birds.velocity = {x:-10, y:0, z:0};
+						xVel = -10;
+						zPos = 20;
 					}else if (birds.position.x < -100){
 						increment = 10;
-						birds.position.z = 5;
-						birds.velocity = {x:10, y:0, z:0};
+						xVel = 10;
+						zPos = 5;
 					}
+					birds.position.x += increment;
+					birds.position.z = zPos;
+					birds.velocity = {x:xVel, y:0, z:0};
 					birds.chirp();
+					count = count%flocks.length;
 				}
 			}, 500);
 		});

@@ -74,7 +74,6 @@
 			var rPos = new gui.CheckBox( {x: 90 + 100 + 100 + 100, y: 90, text: "Randomize Pos",width:20,  height: 20} );
 
 			tp0.value1.bind(makeCb(null));
-			tp0.value2.bind(makeCb(null));
 
 			var generate = new gui.CheckBox( {x: 90 + 100 + 100 + 100, y: 190, text: "Keep Chirping",width:20,  height: 20} );
 
@@ -122,7 +121,7 @@
 				b.position = {x:tp0.value1.v-tp0.max/2, y: 0, z: (40-tp0.value2.v*10)};
 				b.velocity = {x:(Math.random()-0.5)*10, y: 0, z: 0};
 				//console.log(tp0);
-				b.updateParams(params);
+				b.applyParams(params);
 				b.chirp(time);
 				count = (count+1) % birds.length;
 			}

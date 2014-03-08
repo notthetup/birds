@@ -7,9 +7,10 @@ function bird (audioContext, type){
     return;
   }
 
-  this.position = {x:0, y:0, z: 0};
-  this.orientation = {x:0, y:0, z: 0};
-  this.velocity = {x:0, y:0, z: 0};
+  var freqMultiplier = 7000;
+  var freqOffset = 300;
+  var maxAttackDecayTime = 0.9; //seconds
+  var envFreqMultiplier = 3000;
 
   var panner = audioContext.createPanner();
   panner.panningModel = "equalpower";
@@ -18,6 +19,57 @@ function bird (audioContext, type){
 
   var presets = generatePresets();
 
+  var params = presets[type] || presets["long-toed-mudhopper"];
+
+
+  var _frequency = params.ifrq;
+  Object.defineProperty( this, 'frequency', {
+    enumerable: true,
+    set: function ( value ) {
+      _frequency = value;
+      fm.modulatorGain.gain.value = freqOffset + freqMultiplier * value;
+      carrierOsc.frequency.value = freqOffset + freqMultiplier * value;
+    },
+    get: function (){
+      return _frequency;
+    }
+  });
+
+  var _position = {x:0, y:0, z: 0};
+  Object.defineProperty( this, 'position', {
+    enumerable: true,
+    set: function ( value ) {
+      _position = value;
+      panner.setPosition(value.x, value.y, value.z);
+    },
+    get: function (){
+      return _position;
+    }
+  });
+
+  var _orientation = {x:0, y:0, z: 0};
+  Object.defineProperty( this, 'orientation', {
+    enumerable: true,
+    set: function ( value ) {
+      _orientation = value;
+      panner.setOrientation(value.x, value.y, value.z);
+    },
+    get: function (){
+      return _orientation;
+    }
+  });
+
+  var _velocity = {x:0, y:0, z: 0};
+  Object.defineProperty( this, 'velocity', {
+    enumerable: true,
+    set: function ( value ) {
+      _velocity = value;
+      panner.setVelocity(value.x, value.y, value.z);
+    },
+    get: function (){
+      return _velocity;
+    }
+  });
 
   // Create Oscillators
   var carrierOsc = audioContext.createOscillator();
@@ -38,62 +90,49 @@ function bird (audioContext, type){
   var am = new amSynth(audioContext, fm, amOscGain);
 
   // Create control envelopes
-  var mainEnv = new paramEAD(audioContext, mainGain.gain);
-  var modEnv = new paramEAD(audioContext, modOsc.frequency);
-  var amEvn = new paramEAD(audioContext, amOsc.frequency);
-  var mGainEnv = new paramEAD(audioContext,  modOscGain.gain);
-  var amGainEnv = new paramEAD(audioContext, amOscGain.gain);
-
-  var params = presets[type] || presets["long-toed-mudhopper"];
-
-  // Initialize based on type
-  var maxAttackDecayTime = 0.9; //seconds
-  var freqMultiplier = 7000;
-  var freqOffset = 300;
-  var envFreqMultiplier = 3000;
+  this.mainEnvelope = new paramEAD(audioContext, mainGain.gain);
+  this.fmFrequencyEnvelope = new paramEAD(audioContext, modOsc.frequency);
+  this.amFrequencyEnvelope = new paramEAD(audioContext, amOsc.frequency);
+  this.fmGainEnvelope = new paramEAD(audioContext,  modOscGain.gain);
+  this.amGainEnvelope = new paramEAD(audioContext, amOscGain.gain);
 
   // Connect the AM output to destination
   am.connect(mainGain);
   mainGain.connect(panner);
   panner.connect(audioContext.destination);
 
-  this.frequency = params.ifrq;
 
-  this.updateParams = function(params) {
+
+  this.applyParams = function(params) {
+
 
     //  console.log(params);
 
     this.frequency = params.ifrq;
 
-    mainEnv.attackTime = maxAttackDecayTime*params.atk;
-    mainEnv.decayTime = maxAttackDecayTime*params.dcy;
+    this.mainEnvelope.attackTime = maxAttackDecayTime*params.atk;
+    this.mainEnvelope.decayTime = maxAttackDecayTime*params.dcy;
 
-    modEnv.max = envFreqMultiplier*params.fmod1;
-    modEnv.attackTime = maxAttackDecayTime*params.atkf1;
-    modEnv.decayTime = maxAttackDecayTime*params.dcyf1;
+    this.fmFrequencyEnvelope.max = envFreqMultiplier*params.fmod1;
+    this.fmFrequencyEnvelope.attackTime = maxAttackDecayTime*params.atkf1;
+    this.fmFrequencyEnvelope.decayTime = maxAttackDecayTime*params.dcyf1;
 
-    amEvn.max = envFreqMultiplier*params.fmod2;
-    amEvn.attackTime = maxAttackDecayTime*params.atkf2;
-    amEvn.decayTime = maxAttackDecayTime*params.dcyf2;
+    this.amFrequencyEnvelope.max = envFreqMultiplier*params.fmod2;
+    this.amFrequencyEnvelope.attackTime = maxAttackDecayTime*params.atkf2;
+    this.amFrequencyEnvelope.decayTime = maxAttackDecayTime*params.dcyf2;
 
-    mGainEnv.max = params.amod1;
-    mGainEnv.attackTime = maxAttackDecayTime*params.atka1;
-    mGainEnv.decayTime = maxAttackDecayTime*params.dcya1;
+    this.fmGainEnvelope.max = params.amod1;
+    this.fmGainEnvelope.attackTime = maxAttackDecayTime*params.atka1;
+    this.fmGainEnvelope.decayTime = maxAttackDecayTime*params.dcya1;
 
-    amGainEnv.max = params.amod2;
-    amGainEnv.attackTime = maxAttackDecayTime*params.atka2;
-    amGainEnv.decayTime = maxAttackDecayTime*params.dcya2;
+    this.amGainEnvelope.max = params.amod2;
+    this.amGainEnvelope.attackTime = maxAttackDecayTime*params.atka2;
+    this.amGainEnvelope.decayTime = maxAttackDecayTime*params.dcya2;
 
   };
 
   this.chirp = function (time){
 
-    fm.modulatorGain.gain.value = freqOffset + freqMultiplier * this.frequency;
-    carrierOsc.frequency.value = freqOffset + freqMultiplier * this.frequency;
-
-    panner.setPosition(this.position.x, this.position.y, this.position.z);
-    panner.setVelocity(this.velocity.x, this.velocity.y, this.velocity.z);
-    panner.setOrientation(this.orientation.x, this.orientation.y, this.orientation.z);
     // Start the Oscillators
     if (carrierOsc.playbackState == carrierOsc.UNSCHEDULED_STATE){
       mainGain.gain.value = 0;
@@ -103,11 +142,11 @@ function bird (audioContext, type){
     }
 
     console.log('chirrrrp');
-    mainEnv.trigger(time);
-    modEnv.trigger(time);
-    amEvn.trigger(time);
-    mGainEnv.trigger(time);
-    amGainEnv.trigger(time);
+    this.mainEnvelope.trigger(time);
+    this.fmFrequencyEnvelope.trigger(time);
+    this.amFrequencyEnvelope.trigger(time);
+    this.fmGainEnvelope.trigger(time);
+    this.amGainEnvelope.trigger(time);
   };
 
   this.connect = function(output){
@@ -116,7 +155,7 @@ function bird (audioContext, type){
   };
 
 
-  this.updateParams(params);
+  this.applyParams(params);
 
 }
 
