@@ -1,23 +1,30 @@
-function flock(ac , num){
+function flock(ac , num, type){
 	if (!ac) {
 		console.error('AudioContext is required!');
 		return;
 	}
 
 	var CHIRP_SPREAD = 1.5;
-	var FREQ_SPREAD = 0.3;
+	var FREQ_SPREAD = 0.15;
+	var ENV_SPREAD = 0.3;
 
 	var birds = [];
 
 	var flockPanner = ac.createPanner();
+	flockPanner.panningModel = "equalpower";
+	flockPanner.distanceModel = "exponential";
+	flockPanner.refDistance = 0.3;
+
 
 	for (var i = 0; i < num; i++){
-		b = new bird(ac);
+		b = new bird(ac, type);
 		b.connect(flockPanner);
 		birds.push(b);
 	}
 
 	var defaultFreq = birds[0].frequency;
+	var defaultAttack = birds[0].mainEnvelope.attackTime;
+	var defaultDecay = birds[0].mainEnvelope.decayTime;
 
 	this.position = {x:0, y:0, z: 0};
 	this.orientation = {x:0, y:0, z: 0};
@@ -37,10 +44,12 @@ function flock(ac , num){
 		self = this;
 		flockPanner.setVelocity(this.velocity.x, this.velocity.y, this.velocity.z);
 		birds.forEach(function(bird){
-			bird.frequency = defaultFreq+(Math.random()*FREQ_SPREAD);
+			bird.frequency = defaultFreq+((Math.random()-0.5)*FREQ_SPREAD);
+			bird.mainEnvelope.attackTime = defaultAttack+((Math.random()-0.5)*ENV_SPREAD);
+			bird.mainEnvelope.decayTime = defaultDecay+((Math.random()-0.5)*ENV_SPREAD);
 			bird.position = randomizeVector(self.position, self.positionSpread);
 			bird.orientation = randomizeVector(self.orientation, self.orientationSpread);
-			bird.chirp(ac.currentTime + (Math.random()*CHIRP_SPREAD));
+			bird.chirp(ac.currentTime + ((Math.random()-0.5)*CHIRP_SPREAD));
 		});
 	};
 
