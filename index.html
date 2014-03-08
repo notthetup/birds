@@ -75,12 +75,34 @@
 
 			var button = new gui.Button({x: 90+100, y: 5, radius: 25, text: "Chirp", height: 20});
 
-			var check = new gui.CheckBox( {x: 90+100+50, y: 5, text: "Randomize ifrq",width:20,  height: 20} );
-
 			button.value.bind(makeCb(null));
 
-			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5, min: 0, max: 100, value1: 50, value2: 50 } );
+			var rIfqr = new gui.CheckBox( {x: 90+100+50, y: 5, text: "Randomize ifrq",width:20,  height: 20} );
 
+			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5, min: 0, max: 4, value1: 1, value2: 1 } );
+
+			var rPos = new gui.CheckBox( {x: 90 + 100 + 100 + 100, y: 90, text: "Randomize Pos",width:20,  height: 20} );
+
+			tp0.value1.bind(makeCb(null));
+			tp0.value2.bind(makeCb(null));
+
+			var generate = new gui.CheckBox( {x: 90 + 100 + 100 + 100, y: 190, text: "Keep Chirping",width:20,  height: 20} );
+
+			var chirpGen;
+
+			generate.value.bind(function(a, up){
+				if(up){
+					console.log("checked");
+					if (chirpGen){
+						window.clearInterval(chirpGen);
+						chirpGen = null;
+					}else{
+						chirpGen = window.setInterval(function(){
+							chirp(null,ac.currentTime+(Math.random()*0.4));
+						},300);
+					}
+				}
+			});
 
 			document.body.appendChild( gui.getDomElement() );
 
@@ -88,34 +110,30 @@
 			window.AudioContext = window.AudioContext || window.webkitAudioContext;
 			if (window.AudioContext) ac = new AudioContext();
 
-			var birds = [];
-			var panners = [];
+			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
 
-			for (var i = 0; i < 4; i++){
-				b = new bird(ac);
-				p = ac.createPanner();
-				p.panningModel = "equalpower";
-				b.connect(p);
-				p.connect(ac.destination);
-				birds.push(b);
-				panners.push(p);
-			}
 			var count = 0;
 			//var trigButton=document.getElementById("triggerButton");
-			function chirp(caller){
+			function chirp(caller, time){
 				var b = birds[count];
-				var p = panners[count];
 				console.log(JSON.stringify(params, null, '\t' ));
 				//console.log(caller);
-				if(check.value.v && !caller){
+				if(rIfqr.value.v && !caller){
 					params.ifrq = initifrq + (rnd_snd()*0.1);
 					frqKnob.value.v = params.ifrq;
 					frqKnob.draw();
 				}
-				p.setPosition(tp0.value1.v, 0, tp0.value2.v);
-				//console.log(tp0.value1.v + " : " + tp0.value2.v);
-				b.update(params);
-				b.chirp();
+				if(rPos.value.v && !caller){
+					tp0.value1.v = Math.random()*tp0.max;
+					tp0.value2.v = Math.random()*tp0.max;
+					tp0.draw();
+				}
+
+				b.position = {x:tp0.value1.v-tp0.max/2, y: 0, z: (40-tp0.value2.v*10)};
+				b.velocity = {x:(Math.random()-0.5)*10, y: 0, z: 0};
+				//console.log(tp0);
+				b.updateParams(params);
+				b.chirp(time);
 				count = (count+1) % birds.length;
 			}
 
