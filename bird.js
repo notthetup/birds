@@ -7,7 +7,17 @@ function bird (audioContext, type){
     return;
   }
 
+  this.position = {x:0, y:0, z: 0};
+  this.orientation = {x:0, y:0, z: 0};
+  this.velocity = {x:0, y:0, z: 0};
+
+  var panner = audioContext.createPanner();
+  panner.panningModel = "equalpower";
+  panner.distanceModel = "exponential";
+  panner.refDistance = 0.3;
+
   var presets = generatePresets();
+
 
   // Create Oscillators
   var carrierOsc = audioContext.createOscillator();
@@ -34,7 +44,7 @@ function bird (audioContext, type){
   var mGainEnv = new paramEAD(audioContext,  modOscGain.gain);
   var amGainEnv = new paramEAD(audioContext, amOscGain.gain);
 
-  var params = presets[type] || presets["lesser-spotted-grinchwarbler"];
+  var params = presets[type] || presets["long-toed-mudhopper"];
 
   // Initialize based on type
   var maxAttackDecayTime = 0.9; //seconds
@@ -44,14 +54,17 @@ function bird (audioContext, type){
 
   // Connect the AM output to destination
   am.connect(mainGain);
-  mainGain.connect(audioContext.destination);
+  mainGain.connect(panner);
+  panner.connect(audioContext.destination);
 
-  this.update = function(params) {
+  this.frequency = params.ifrq;
+
+  this.updateParams = function(params) {
 
     //  console.log(params);
 
-    fm.modulatorGain.gain.value = freqOffset + freqMultiplier * params.ifrq;
-    carrierOsc.frequency.value = freqOffset + freqMultiplier * params.ifrq;
+    this.frequency = params.ifrq;
+
     mainEnv.attackTime = maxAttackDecayTime*params.atk;
     mainEnv.decayTime = maxAttackDecayTime*params.dcy;
 
@@ -74,6 +87,13 @@ function bird (audioContext, type){
   };
 
   this.chirp = function (time){
+
+    fm.modulatorGain.gain.value = freqOffset + freqMultiplier * this.frequency;
+    carrierOsc.frequency.value = freqOffset + freqMultiplier * this.frequency;
+
+    panner.setPosition(this.position.x, this.position.y, this.position.z);
+    panner.setVelocity(this.velocity.x, this.velocity.y, this.velocity.z);
+    panner.setOrientation(this.orientation.x, this.orientation.y, this.orientation.z);
     // Start the Oscillators
     if (carrierOsc.playbackState == carrierOsc.UNSCHEDULED_STATE){
       mainGain.gain.value = 0;
@@ -91,12 +111,12 @@ function bird (audioContext, type){
   };
 
   this.connect = function(output){
-    mainGain.disconnect();
-    mainGain.connect(output);
+    panner.disconnect();
+    panner.connect(output);
   };
 
 
-  this.update(params);
+  this.updateParams(params);
 
 }
 
@@ -157,7 +177,7 @@ function paramEAD(audioContext, param, attackTime, decayTime, min, max){
   this.max = max || 1;
 
   this.trigger = function(time){
-    var startTime = audioContext.currentTime + (time || 0);
+    var startTime = time || audioContext.currentTime;
     //console.log(startTime);
     var value = param.value;
     param.cancelScheduledValues(startTime);
@@ -305,7 +325,7 @@ function generatePresets(){
   };
 
   //common-muckoink 0.0204082 0.8 0.0816327 0.0204082 0.001 0.99 0.0204082 0.01 1 1 0.142857 0.734694 1 0.0612245 0.530612
-   presets["common-muckoink"] = {
+  presets["common-muckoink"] = {
     "ifrq": 0.0204082,
     "atk": 0.8,
     "dcy": 0.0816327,
