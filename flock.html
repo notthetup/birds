@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Flock</title>
+
+</head>
+
+<!-- <button id="triggerButton">Chirrrp</button> -->
+
+
+<body>
+	<script src="bird.js"></script>
+	<script src="flock.js"></script>
+	<script src="xgui.js"></script>
+	<script>
+		window.addEventListener("load",  function(){
+
+			gui = new xgui( {width: 640, height: 660, backgroundColor: "rgb(65, 104, 137)", frontColor: "rgb(153, 193, 226)", dimColor: "rgb(90, 137, 177)"} );
+
+			var button = new gui.Button({x: 90+100, y: 5, radius: 25, text: "Chirp", height: 20});
+			var running = false;
+
+			button.value.bind(function(a, up){
+				if(up) {
+					if (running) {
+						running = false;
+					}
+					else{
+						running = true;
+					}
+				}
+			});
+
+			document.body.appendChild( gui.getDomElement() );
+
+			var ac;
+			window.AudioContext = window.AudioContext || window.webkitAudioContext;
+			if (window.AudioContext) ac = new AudioContext();
+
+			var birds = new flock(ac, 5);
+			birds.position = {x:-100,y:0, z:5};
+			birds.velocity = {x:10, y:0, z:0};
+
+			var increment = 10;
+
+			window.setInterval(function(){
+				if (running){
+					birds.position.x += increment;
+					if (birds.position.x > 100){
+						increment = -10;
+						birds.position.z = 20;
+						birds.velocity = {x:-10, y:0, z:0};
+					}else if (birds.position.x < -100){
+						increment = 10;
+						birds.position.z = 5;
+						birds.velocity = {x:10, y:0, z:0};
+					}
+					birds.chirp();
+				}
+			}, 500);
+		});
+	</script>
+</body>
