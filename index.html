@@ -65,9 +65,12 @@
 
 			var button = new gui.Button({x: 90+100, y: 5, radius: 25, text: "Chirp", height: 20});
 
-			var check = new gui.CheckBox( {x: 90+100+100, y: 5, text: "Randomize ifrq",width:20,  height: 20} );
+			var check = new gui.CheckBox( {x: 90+100+50, y: 5, text: "Randomize ifrq",width:20,  height: 20} );
 
 			button.value.bind(makeCb(null));
+
+			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5, min: 0, max: 100, value1: 50, value2: 50 } );
+
 
 			document.body.appendChild( gui.getDomElement() );
 
@@ -75,11 +78,23 @@
 			window.AudioContext = window.AudioContext || window.webkitAudioContext;
 			if (window.AudioContext) ac = new AudioContext();
 
-			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
+			var birds = [];
+			var panners = [];
+
+			for (var i = 0; i < 4; i++){
+				b = new bird(ac);
+				p = ac.createPanner();
+				p.panningModel = "equalpower";
+				b.connect(p);
+				p.connect(ac.destination);
+				birds.push(b);
+				panners.push(p);
+			}
 			var count = 0;
 			//var trigButton=document.getElementById("triggerButton");
 			function chirp(caller){
 				var b = birds[count];
+				var p = panners[count];
 				console.log(JSON.stringify(params, null, '\t' ));
 				//console.log(caller);
 				if(check.value.v && !caller){
@@ -87,6 +102,8 @@
 					frqKnob.value.v = params.ifrq;
 					frqKnob.draw();
 				}
+				p.setPosition(tp0.value1.v, 0, tp0.value2.v);
+				//console.log(tp0.value1.v + " : " + tp0.value2.v);
 				b.update(params);
 				b.chirp();
 				count = (count+1) % birds.length;
