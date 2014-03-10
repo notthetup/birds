@@ -28,16 +28,9 @@
 			var params = presets['lesser-spotted-grinchwarbler'];
 			var initifrq = params.ifrq;
 
-				for (key in params) {
-					knob = knobs[key];
-					knob.value.v = params[key];
-					knob.draw();
-				}
-				chirp()
 			var frqKnob;
 			var knob, key;
 			var i = 0;
-			var knobs = {};
 
 			function makeCb(key) {
 				return function(a, up) {
@@ -56,8 +49,6 @@
 					if (key == "ifrq"){
 						frqKnob = knob;
 					}
-
-					knobs[key] = knob;
 
 					knob.value.bind(makeCb(key));
 
