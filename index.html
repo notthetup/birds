@@ -28,23 +28,12 @@
 			var params = presets['lesser-spotted-grinchwarbler'];
 			var initifrq = params.ifrq;
 
-			var dropdown = new gui.DropDown( {x: 30, y: 5, height:20, width:148, values:options , texts:options } );
-
-			dropdown.value.bind(function(key){
-				params = presets[key];
-				knobs.forEach(function (knob, i){
-					knob.value.v = params[pk[i]];
-					knob.draw();
-				});
-				initifrq = params.ifrq;
 				for (key in params) {
 					knob = knobs[key];
 					knob.value.v = params[key];
 					knob.draw();
 				}
 				chirp()
-			});
-
 			var frqKnob;
 			var knob, key;
 			var i = 0;
@@ -79,21 +68,22 @@
 				}
 			}
 
-			var button = new gui.Button({x: 90+100, y: 5, radius: 25, text: "Chirp", height: 20});
+			var dropdown = new gui.DropDown( {x: 80, y: 7, height:20, width:148, values:options , texts:options } );
+
+			dropdown.value.bind(function(key){
+				params = presets[key];
+				knobs.forEach(function (knob, i){
+					knob.value.v = params[pk[i]];
+					knob.draw();
+				});
+				initifrq = params.ifrq;
+			});
+
+			var button = new gui.Button({x: 90+170, y: 5, text: "Chirp", height: 25});
 
 			button.value.bind(makeCb(null));
 
-			var rIfqr = new gui.CheckBox( {x: 90+100+50, y: 5, text: "Randomize ifrq",width:20,  height: 20} );
-
-			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5, min: 0, max: 4, value1: 1.5, value2:3.8 } );
-
-			var rPos = new gui.CheckBox( {x: 90 + 100 + 100 + 100, y: 90, text: "Randomize Pos",width:20,  height: 20} );
-
-			tp0.value1.bind(makeCb(null));
-
-			var generate = new gui.CheckBox( {x: 90 + 100 + 100 + 100, y: 190, text: "Keep Chirping",width:20,  height: 20} );
-
-			var chirpGen;
+			var generate = new gui.CheckBox( {x: 90 +210, y: 10, text: "Repeat",width:15,  height: 15} );
 
 			generate.value.bind(function(a, up){
 				if(up){
@@ -108,6 +98,16 @@
 					}
 				}
 			});
+
+			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5, min: 0, max: 4, value1: 1.5, value2:3.8 } );
+
+			tp0.value1.bind(makeCb(null));
+
+			var rPos = new gui.CheckBox( {x: 90 + 410, y: 20, text: "Rand",width:15,  height: 15} );
+
+			var rIfqr = new gui.CheckBox( {x: 30, y: 85, text: "Rand",width:15,  height: 15} );
+
+			var chirpGen;
 
 			document.body.appendChild( gui.getDomElement() );
 
