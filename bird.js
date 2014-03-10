@@ -19,7 +19,7 @@ function bird (audioContext, type){
 
   var presets = generatePresets();
 
-  var params = presets[type] || presets["long-toed-mudhopper"];
+  var params = presets[type] || presets["lesser-spotted-grinchwarbler"];
 
 
   var _frequency = params.ifrq;
@@ -223,7 +223,7 @@ function paramEAD(audioContext, param, attackTime, decayTime, min, max){
     param.setValueAtTime(this.min, startTime);
     param.setTargetAtTime(this.max, startTime, this.attackTime);
     param.setTargetAtTime(this.min, startTime + (this.attackTime/t60multiplier), this.decayTime);
-    param.setValueAtTime(this.min, startTime + (this.attackTime/t60multiplier) + (this.decayTime/t60multiplier) + FADE_OUT_TIME) ;
+    //param.setValueAtTime(this.min, startTime + (this.attackTime/t60multiplier) + (this.decayTime/t60multiplier) + FADE_OUT_TIME);
   };
 }
 
@@ -253,7 +253,7 @@ function generatePresets(){
   presets["speckled-throated-spew"] = {
     "ifrq": 0.183673,
     "atk": 0.591837,
-    "dcy": 0.387755,
+    "dcy": 0.127755,
     "fmod1": 0.0104082,
     "atkf1": 0.530612,
     "dcyf1": 0.346939,
@@ -268,6 +268,7 @@ function generatePresets(){
     "dcya2": 0.653061
   };
 
+  // ringy
   //triple-tailed-tree-troubler 0.387755 0.0204082 0.204082 0.367347 0.571429 0.734694 0.918367 1 0.77551 0.571429 0.367347 0.22449 0.0204082 0.183673 0.44898
   presets["triple-tailed-tree-troubler"] = {
     "ifrq": 0.387755,
