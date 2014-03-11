@@ -12,7 +12,7 @@ Here is a brief overview of the structure of the connections.
 
 ## Where ?
 
-Play with the model [here](http://notthetup.github.io/birds)
+Play with the model [here](http://notthetup.github.io/birds). Only works on Chrome and Safari for now. FF has some funky bugs.
 
 
 ## Why ?
