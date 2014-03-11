@@ -12,6 +12,8 @@ function bird (audioContext, type){
   var maxAttackDecayTime = 0.9; //seconds
   var envFreqMultiplier = 3000;
 
+  var oscStarted = false;
+
   var panner = audioContext.createPanner();
   panner.panningModel = "equalpower";
   panner.distanceModel = "exponential";
@@ -134,11 +136,12 @@ function bird (audioContext, type){
   this.chirp = function (time){
 
     // Start the Oscillators
-    if (carrierOsc.playbackState == carrierOsc.UNSCHEDULED_STATE){
+    if (!oscStarted){
       mainGain.gain.value = 0;
       carrierOsc.start(0);
       modOsc.start(0);
       amOsc.start(0);
+      oscStarted = true;
     }
 
     console.log('chirrrrp');
@@ -161,17 +164,7 @@ function bird (audioContext, type){
 
 function fmSynth(audioContext, carrier, modulator, modGain){
 
-  if (!carrier.hasOwnProperty('frequency')){
-    throw {
-      name: "Carrier has no frequency property",
-      message: "Attempt to access an inexistant 'frequency' property of the carrier AudioNode " + carrier,
-      toString: function () {
-        return this.name + ": " + this.message;
-      }
-    };
-  }
-
-  this.modulatorGain = audioContext.createGainNode();
+  this.modulatorGain = audioContext.createGain();
   this.modulatorGain.gain.value = modGain || 300;
 
   modulator.connect(this.modulatorGain);

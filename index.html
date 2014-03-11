@@ -17,6 +17,13 @@
 	<script src="xgui.js"></script>
 	<script>
 		window.addEventListener("load",  function(){
+			var ac;
+			window.AudioContext = window.AudioContext || window.webkitAudioContext;
+			if (window.AudioContext) ac = new AudioContext();
+
+			var count = 0;
+
+			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
 
 			// var
 			gui = new xgui( {width: 640, height: 660, backgroundColor: "rgb(65, 104, 137)", frontColor: "rgb(153, 193, 226)", dimColor: "rgb(90, 137, 177)"} );
@@ -102,13 +109,6 @@
 
 			document.body.appendChild( gui.getDomElement() );
 
-			var ac;
-			window.AudioContext = window.AudioContext || window.webkitAudioContext;
-			if (window.AudioContext) ac = new AudioContext();
-
-			var birds = [new bird(ac), new bird(ac), new bird(ac), new bird(ac)];
-
-			var count = 0;
 			//var trigButton=document.getElementById("triggerButton");
 			function chirp(caller, time){
 				var b = birds[count];
