@@ -125,7 +125,7 @@ function bird (audioContext, type){
     this.fmGainEnvelope.attackTime = maxAttackDecayTime*params.atka1;
     this.fmGainEnvelope.decayTime = maxAttackDecayTime*params.dcya1;
 
-    this.amGainEnvelope.max = params.amod2;
+    this.amGainEnvelope.max = -params.amod2;
     this.amGainEnvelope.attackTime = maxAttackDecayTime*params.atka2;
     this.amGainEnvelope.decayTime = maxAttackDecayTime*params.dcya2;
 
@@ -171,9 +171,6 @@ function fmSynth(audioContext, carrier, modulator, modGain){
     };
   }
 
-  carrier = carrier || audioContext.createOscillator();
-  modulator = modulator || audioContext.createOscillator();
-
   this.modulatorGain = audioContext.createGainNode();
   this.modulatorGain.gain.value = modGain || 300;
 
@@ -184,11 +181,16 @@ function fmSynth(audioContext, carrier, modulator, modGain){
     carrier.disconnect();
     carrier.connect(audioNode);
   };
+
+  this.disconnect = function(audioNode){
+    carrier.disconnect(audioNode);
+  };
 }
 
 function amSynth(audioContext, node1, node2){
 
   var amGain = audioContext.createGain();
+  amGain.gain.value = 1;
 
   node1.connect(amGain);
   node2.connect(amGain.gain);
@@ -196,6 +198,8 @@ function amSynth(audioContext, node1, node2){
   this.connect = function(audioNode){
     amGain.disconnect();
     amGain.connect(audioNode);
+    //node2.disconnect();
+    //node2.connect(audioNode);
   };
 }
 
@@ -206,8 +210,8 @@ function paramEAD(audioContext, param, attackTime, decayTime, min, max){
   e(-n) = 0.001; - Decay Rate of setTargetAtTime.
   n = 6.90776;
   */
-  var t60multiplier = 1.90776;
-  var FADE_OUT_TIME = 1;
+  var t60multiplier = 6.90776;
+  var FADE_OUT_TIME = 2;
 
   this.attackTime = attackTime || 0.9;
   this.decayTime = decayTime || 0.9;
@@ -221,9 +225,8 @@ function paramEAD(audioContext, param, attackTime, decayTime, min, max){
     var value = param.value;
     param.cancelScheduledValues(startTime);
     param.setValueAtTime(this.min, startTime);
-    param.setTargetAtTime(this.max, startTime, this.attackTime);
-    param.setTargetAtTime(this.min, startTime + (this.attackTime/t60multiplier), this.decayTime);
-    //param.setValueAtTime(this.min, startTime + (this.attackTime/t60multiplier) + (this.decayTime/t60multiplier) + FADE_OUT_TIME);
+    param.setTargetAtTime(this.max, startTime, this.attackTime/t60multiplier);
+    param.setTargetAtTime(this.min, startTime + this.attackTime+(1.0/44100.0), this.decayTime/t60multiplier);
   };
 }
 
@@ -253,7 +256,7 @@ function generatePresets(){
   presets["speckled-throated-spew"] = {
     "ifrq": 0.183673,
     "atk": 0.591837,
-    "dcy": 0.127755,
+    "dcy": 0.387755,
     "fmod1": 0.0104082,
     "atkf1": 0.530612,
     "dcyf1": 0.346939,
@@ -328,9 +331,9 @@ function generatePresets(){
 
   //pointy-beaked-beetlefiend 0.428571 0.204082 0.489796 0.0204082 0.795918 0.591837 0.285714 0.22449 0.489796 0.204082 0.836735 0.734694 0.77551 0.428571 0.142857
   presets["pointy-beaked-beetlefiend"] = {
-    "ifrq": 0.428571,
+    "ifrq": 0.388571,
     "atk": 0.204082,
-    "dcy": 0.489796,
+    "dcy": 0.309796,
     "fmod1": 0.0204082,
     "atkf1": 0.795918,
     "dcyf1": 0.591837,

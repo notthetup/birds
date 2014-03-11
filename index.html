@@ -85,7 +85,7 @@
 					}else{
 						chirpGen = window.setInterval(function(){
 							chirp(null,ac.currentTime+(Math.random()*0.4));
-						},300);
+						},(params.atk*1000*0.9));
 					}
 				}
 			});
@@ -115,7 +115,7 @@
 				console.log(JSON.stringify(params, null, '\t' ));
 				//console.log(caller);
 				if(rIfqr.value.v && !caller){
-					params.ifrq = initifrq + (rnd_snd()*0.1);
+					params.ifrq = initifrq + (rnd_snd()*0.01);
 					frqKnob.value.v = params.ifrq;
 					frqKnob.draw();
 				}
