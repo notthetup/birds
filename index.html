@@ -70,11 +70,11 @@
 				initifrq = params.ifrq;
 			});
 
-			var button = new gui.Button({x: 90+170, y: 5, text: "Chirp", height: 25});
+			var button = new gui.Button({x: 90+180, y: 5, text: "Chirp", height: 25, font: "20px Arial"});
 
 			button.value.bind(makeCb(null));
 
-			var generate = new gui.CheckBox( {x: 90 +210, y: 10, text: "Repeat",width:15,  height: 15} );
+			var generate = new gui.CheckBox( {x: 90 +240, y: 10, text: "Repeat",width:15,  height: 15} );
 
 			generate.value.bind(function(a, up){
 				if(up){
@@ -90,11 +90,11 @@
 				}
 			});
 
-			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5, min: 0, max: 4, value1: 1.5, value2:3.8 } );
+			var tp0 = new gui.TrackPad( {x: 90 + 100 + 100 + 100, y: 5 + 70, min: 0, max: 4, value1: 1.5, value2:3.8 } );
 
 			tp0.value1.bind(makeCb(null));
 
-			var rPos = new gui.CheckBox( {x: 90 + 410, y: 20, text: "Rand",width:15,  height: 15} );
+			var rPos = new gui.CheckBox( {x: 90 + 410, y: 90, text: "Rand",width:15,  height: 15} );
 
 			var rIfqr = new gui.CheckBox( {x: 30, y: 85, text: "Rand",width:15,  height: 15} );
 

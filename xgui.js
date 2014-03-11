@@ -855,6 +855,7 @@ var xgui = function ( p ) {
 	this.Button = function ( p ) {
 		Base.call( this, p );
 
+		this.font = p.font || font;
 		this.name = "Button";
 		this.fullWidth = 0;
 		this.width = this.fullWidth;
@@ -886,7 +887,7 @@ var xgui = function ( p ) {
 
 		context.fillStyle = bgColor;
 		if (this.mouseIsDown) context.fillStyle = frontColor;
-		context.font = font;
+		context.font = this.font;
 		context.textBaseline = "alphabetic";
 		context.textAlign = "left";
 		context.fillText(this.text, this.x+4, this.y+11+addy);
