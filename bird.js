@@ -264,7 +264,6 @@ function generatePresets(){
     "dcya2": 0.653061
   };
 
-  // ringy
   //triple-tailed-tree-troubler 0.387755 0.0204082 0.204082 0.367347 0.571429 0.734694 0.918367 1 0.77551 0.571429 0.367347 0.22449 0.0204082 0.183673 0.44898
   presets["triple-tailed-tree-troubler"] = {
     "ifrq": 0.387755,

@@ -35,42 +35,63 @@
 				}
 			});
 
-			document.body.appendChild( gui.getDomElement() );
-
+			var options = Object.keys(generatePresets());
+			var type = "speckled-throated-spew";
+			var intervalID = null;
 			var ac;
 			window.AudioContext = window.AudioContext || window.webkitAudioContext;
 			if (window.AudioContext) ac = new AudioContext();
 
-			var flocks = [new flock(ac, 5), new flock(ac, 5), new flock(ac, 5), new flock(ac, 5)];
-			flocks.forEach(function(flock){
-				flock.position = {x:-100,y:0, z:5};
-				flock.velocity = {x:10, y:0, z:0};
+			var flocks = [new flock(ac, 5, type), new flock(ac, 5, type), new flock(ac, 5, type), new flock(ac, 5, type)];
+
+			function flyTheFlock(flocks, interval){
+
+				var increment = 10;
+				var zPos = 5;
+				var xVel = 10;
+				var count = 0;
+
+				flocks.forEach(function(flock){
+					flock.position = {x:-100,y:0, z:5};
+					flock.velocity = {x:10, y:0, z:0};
+				});
+
+				intervalID = window.setInterval(function(){
+					if (running){
+						var birds = flocks[count++];
+						if (birds.position.x > 100){
+							increment = -10;
+							xVel = -10;
+							zPos = 20;
+						}else if (birds.position.x < -100){
+							increment = 10;
+							xVel = 10;
+							zPos = 5;
+						}
+						birds.position.x += increment;
+						birds.position.z = zPos;
+						birds.velocity = {x:xVel, y:0, z:0};
+						birds.chirp();
+						count = count%flocks.length;
+					}
+				}, interval);
+
+				return intervalID;
+			}
+
+			var dropdown = new gui.DropDown( {x: 280, y: 7, height:20, width:148, values:options , texts:options } );
+
+			dropdown.value.bind(function(key){
+				if (intervalID) window.clearInterval(intervalID);
+				flocks = null;
+				flocks = [new flock(ac, 5, key), new flock(ac, 5, key), new flock(ac, 5, key), new flock(ac, 5, key)];
+				intervalID = flyTheFlock(flocks, 700);
 			});
 
-			var increment = 10;
-			var zPos = 5;
-			var xVel = 10;
-			var count = 0;
+			document.body.appendChild( gui.getDomElement() );
 
-			window.setInterval(function(){
-				if (running){
-					var birds = flocks[count++];
-					if (birds.position.x > 100){
-						increment = -10;
-						xVel = -10;
-						zPos = 20;
-					}else if (birds.position.x < -100){
-						increment = 10;
-						xVel = 10;
-						zPos = 5;
-					}
-					birds.position.x += increment;
-					birds.position.z = zPos;
-					birds.velocity = {x:xVel, y:0, z:0};
-					birds.chirp();
-					count = count%flocks.length;
-				}
-			}, 700);
+			intervalID = flyTheFlock(flocks, 700);
+
 		});
 	</script>
 </body>

@@ -4,6 +4,11 @@ function flock(ac , num, type){
 		return;
 	}
 
+	if (type === "triple-tailed-tree-troubler"){
+		console.log("The triple-tailed-tree-troubler model causes a horrible feedback as a flock. Will debug later");
+		return null;
+	}
+
 	var CHIRP_SPREAD = 1.5;
 	var FREQ_SPREAD = 0.15;
 	var ENV_SPREAD = 0.3;
