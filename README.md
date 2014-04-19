@@ -3,7 +3,7 @@ birds
 
 ## What ?
 
-WebAudioAPI based Birdcall Synthesis based on AM+FM using ideas from  [Start from Birdcall synthesis - Obiwannab](http://obiwannabe.co.uk/tutorials/html/tutorial_birds.html).
+WebAudioAPI based Birdcall Synthesis based on AM+FM using ideas from  [Start from Birdcall synthesis - Andy Farrell](http://obiwannabe.co.uk/tutorials/html/tutorial_birds.html).
 
 Here is a brief overview of the structure of the connections.
 
