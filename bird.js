@@ -66,7 +66,7 @@ function bird (audioContext, type){
     enumerable: true,
     set: function ( value ) {
       _velocity = value;
-      panner.setVelocity(value.x, value.y, value.z);
+//       panner.setVelocity(value.x, value.y, value.z);
     },
     get: function (){
       return _velocity;
