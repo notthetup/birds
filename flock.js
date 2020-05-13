@@ -47,7 +47,7 @@ function flock(ac , num, type){
 
 	this.chirp = function(time){
 		self = this;
-		flockPanner.setVelocity(this.velocity.x, this.velocity.y, this.velocity.z);
+// 		flockPanner.setVelocity(this.velocity.x, this.velocity.y, this.velocity.z);
 		birds.forEach(function(bird){
 			bird.frequency = defaultFreq+((Math.random()-0.5)*FREQ_SPREAD);
 			bird.mainEnvelope.attackTime = defaultAttack+((Math.random()-0.5)*ENV_SPREAD);
