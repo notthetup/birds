@@ -209,7 +209,6 @@ export class Bird {
 
   setFrequency(frequency) {
     const val = FREQ_OFFSET+FREQ_MULTIPLIER*frequency;
-    this.fm.modulatorGain.gain.value = val;
     this.fm.setCarrierFrequencyValue(val);
   }
 
@@ -304,6 +303,7 @@ class BirdFM {
   }
 
   setCarrierFrequencyValue(frequency) {
+    this.modulatorGain.gain.value = frequency;
     this.carrierOsc.frequency.value = frequency
   }
 }
