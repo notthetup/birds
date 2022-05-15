@@ -9,14 +9,14 @@
   <script type="module" >
     import {Bird, PRESETS} from './birds.js';
     var setup = false;
-    var audioContext, bird;
+    var bird;
     window.addEventListener('load', () => {
       document.getElementById("chirp").addEventListener("click", () => {
         if (!setup){
-          audioContext = new AudioContext();
+          let audioContext = new AudioContext();
           bird = new Bird(audioContext);
-          bird.setup(PRESETS["lesser-spotted-grinchwarbler"]);
-          // bird.setup(PRESETS["speckled-throated-spew"]);
+          // bird.setup(PRESETS["lesser-spotted-grinchwarbler"]);
+          bird.setup(PRESETS["triple-tailed-tree-troubler"]);
           bird.connect(audioContext.destination)
         }
         bird.chirp();

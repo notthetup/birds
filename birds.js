@@ -7,153 +7,153 @@ const ENVELOPE_FREQ_MULTIPLIER = 3000;
 
 export const PRESETS = {
   "lesser-spotted-grinchwarbler": {
-    "ifrq": 0.55102,
-    "atk": 0.591837,
-    "dcy": 0.187755,
-    "fmod1": 0.0716327,
-    "atkf1": 0.0204082,
-    "dcyf1": 0.346939,
-    "fmod2": 0.0204082,
-    "atkf2": 0.55102,
-    "dcyf2": 0.122449,
-    "amod1": 0.632653,
-    "atka1": 1,
-    "dcya1": 0.612245,
-    "amod2": 0.346939,
-    "atka2": 0.816327,
-    "dcya2": 0.653061
+    "frequency": 0.55102,
+    "globalAttack": 0.591837,
+    "globalDecay": 0.187755,
+    "fmFreqMaxValue": 0.0716327,
+    "fmFreqAttack": 0.0204082,
+    "fmFreqDecay": 0.346939,
+    "amFreqMaxValue": 0.0204082,
+    "amFreqAttack": 0.55102,
+    "amFreqDecay": 0.122449,
+    "fmGainMaxValue": 0.632653,
+    "fmGainAttack": 1,
+    "fmGainDecay": 0.612245,
+    "amGainMaxValue": 0.346939,
+    "amGainAttack": 0.816327,
+    "amGainDecay": 0.653061
   },
 
   "speckled-throated-spew": {
-    "ifrq": 0.183673,
-    "atk": 0.591837,
-    "dcy": 0.387755,
-    "fmod1": 0.0104082,
-    "atkf1": 0.530612,
-    "dcyf1": 0.346939,
-    "fmod2": 0.244898,
-    "atkf2": 0.55102,
-    "dcyf2": 0.122449,
-    "amod1": 0.387755,
-    "atka1": 1,
-    "dcya1": 0.612245,
-    "amod2": 0.346939,
-    "atka2": 0.816327,
-    "dcya2": 0.653061
+    "frequency": 0.183673,
+    "globalAttack": 0.591837,
+    "globalDecay": 0.387755,
+    "fmFreqMaxValue": 0.0104082,
+    "fmFreqAttack": 0.530612,
+    "fmFreqDecay": 0.346939,
+    "amFreqMaxValue": 0.244898,
+    "amFreqAttack": 0.55102,
+    "amFreqDecay": 0.122449,
+    "fmGainMaxValue": 0.387755,
+    "fmGainAttack": 1,
+    "fmGainDecay": 0.612245,
+    "amGainMaxValue": 0.346939,
+    "amGainAttack": 0.816327,
+    "amGainDecay": 0.653061
   },
 
   //triple-tailed-tree-troubler 0.387755 0.0204082 0.204082 0.367347 0.571429 0.734694 0.918367 1 0.77551 0.571429 0.367347 0.22449 0.0204082 0.183673 0.44898
   "triple-tailed-tree-troubler" : {
-    "ifrq": 0.387755,
-    "atk": 0.0204082,
-    "dcy": 0.204082,
-    "fmod1": 0.367347,
-    "atkf1": 0.571429,
-    "dcyf1": 0.734694,
-    "fmod2": 0.918367,
-    "atkf2": 1,
-    "dcyf2": 0.77551,
-    "amod1": 0.571429,
-    "atka1": 0.367347,
-    "dcya1": 0.22449,
-    "amod2": 0.0204082,
-    "atka2": 0.183673,
-    "dcya2": 0.44898
+    "frequency": 0.387755,
+    "globalAttack": 0.0204082,
+    "globalDecay": 0.204082,
+    "fmFreqMaxValue": 0.367347,
+    "fmFreqAttack": 0.571429,
+    "fmFreqDecay": 0.734694,
+    "amFreqMaxValue": 0.918367,
+    "amFreqAttack": 1,
+    "amFreqDecay": 0.77551,
+    "fmGainMaxValue": 0.571429,
+    "fmGainAttack": 0.367347,
+    "fmGainDecay": 0.22449,
+    "amGainMaxValue": 0.0204082,
+    "amGainAttack": 0.183673,
+    "amGainDecay": 0.44898
   },
 
   //long-toed-mudhopper 0.163265 0.22449 0.183673 0.00306122 0.122449 1 0.0612245 1 0.77551 0.979592 0.204082 0.734694 1 0.142857 0.612245
   "long-toed-mudhopper" : {
-    "ifrq": 0.163265,
-    "atk": 0.22449,
-    "dcy": 0.183673,
-    "fmod1": 0.00306122,
-    "atkf1": 0.122449,
-    "dcyf1": 1,
-    "fmod2": 0.0612245,
-    "atkf2": 1,
-    "dcyf2": 0.77551,
-    "amod1": 0.979592,
-    "atka1": 0.204082,
-    "dcya1": 0.734694,
-    "amod2": 1,
-    "atka2": 0.142857,
-    "dcya2": 0.612245
+    "frequency": 0.163265,
+    "globalAttack": 0.22449,
+    "globalDecay": 0.183673,
+    "fmFreqMaxValue": 0.00306122,
+    "fmFreqAttack": 0.122449,
+    "fmFreqDecay": 1,
+    "amFreqMaxValue": 0.0612245,
+    "amFreqAttack": 1,
+    "amFreqDecay": 0.77551,
+    "fmGainMaxValue": 0.979592,
+    "fmGainAttack": 0.204082,
+    "fmGainDecay": 0.734694,
+    "amGainMaxValue": 1,
+    "amGainAttack": 0.142857,
+    "amGainDecay": 0.612245
   },
 
   //yellow-yiffled-yaffle 0.0204082 0.367347 0.183673 0.0612245 0 1 0.285714 0.22449 0.489796 0.367347 0.387755 0.734694 0.204082 0.428571 0.142857
   "yellow-yiffled-yaffle" : {
-    "ifrq": 0.0204082,
-    "atk": 0.367347,
-    "dcy": 0.183673,
-    "fmod1": 0.0612245,
-    "atkf1": 0,
-    "dcyf1": 1,
-    "fmod2": 0.285714,
-    "atkf2": 0.22449,
-    "dcyf2": 0.489796,
-    "amod1": 0.367347,
-    "atka1": 0.387755,
-    "dcya1": 0.734694,
-    "amod2": 0.204082,
-    "atka2": 0.428571,
-    "dcya2": 0.142857
+    "frequency": 0.0204082,
+    "globalAttack": 0.367347,
+    "globalDecay": 0.183673,
+    "fmFreqMaxValue": 0.0612245,
+    "fmFreqAttack": 0,
+    "fmFreqDecay": 1,
+    "amFreqMaxValue": 0.285714,
+    "amFreqAttack": 0.22449,
+    "amFreqDecay": 0.489796,
+    "fmGainMaxValue": 0.367347,
+    "fmGainAttack": 0.387755,
+    "fmGainDecay": 0.734694,
+    "amGainMaxValue": 0.204082,
+    "amGainAttack": 0.428571,
+    "amGainDecay": 0.142857
   },
 
   //pointy-beaked-beetlefiend 0.428571 0.204082 0.489796 0.0204082 0.795918 0.591837 0.285714 0.22449 0.489796 0.204082 0.836735 0.734694 0.77551 0.428571 0.142857
   "pointy-beaked-beetlefiend" : {
-    "ifrq": 0.388571,
-    "atk": 0.204082,
-    "dcy": 0.309796,
-    "fmod1": 0.0204082,
-    "atkf1": 0.795918,
-    "dcyf1": 0.591837,
-    "fmod2": 0.285714,
-    "atkf2": 0.22449,
-    "dcyf2": 0.489796,
-    "amod1": 0.204082,
-    "atka1": 0.836735,
-    "dcya1": 0.734694,
-    "amod2": 0.77551,
-    "atka2": 0.428571,
-    "dcya2": 0.142857
+    "frequency": 0.388571,
+    "globalAttack": 0.204082,
+    "globalDecay": 0.309796,
+    "fmFreqMaxValue": 0.0204082,
+    "fmFreqAttack": 0.795918,
+    "fmFreqDecay": 0.591837,
+    "amFreqMaxValue": 0.285714,
+    "amFreqAttack": 0.22449,
+    "amFreqDecay": 0.489796,
+    "fmGainMaxValue": 0.204082,
+    "fmGainAttack": 0.836735,
+    "fmGainDecay": 0.734694,
+    "amGainMaxValue": 0.77551,
+    "amGainAttack": 0.428571,
+    "amGainDecay": 0.142857
   },
 
   //african-boojuboolubala 0.306122 0.959184 0.0408163 1 0 0.591837 0.285714 0.22449 0.489796 0.204082 0.836735 0.734694 0.77551 0.428571 0.142857
   "african-boojuboolubala" :  {
-    "ifrq": 0.306122,
-    "atk": 0.959184,
-    "dcy": 0.0408163,
-    "fmod1": 1,
-    "atkf1": 0,
-    "dcyf1": 0.591837,
-    "fmod2": 0.285714,
-    "atkf2": 0.22449,
-    "dcyf2": 0.489796,
-    "amod1": 0.204082,
-    "atka1": 0.836735,
-    "dcya1": 0.734694,
-    "amod2": 0.77551,
-    "atka2": 0.428571,
-    "dcya2": 0.142857
+    "frequency": 0.306122,
+    "globalAttack": 0.959184,
+    "globalDecay": 0.0408163,
+    "fmFreqMaxValue": 1,
+    "fmFreqAttack": 0,
+    "fmFreqDecay": 0.591837,
+    "amFreqMaxValue": 0.285714,
+    "amFreqAttack": 0.22449,
+    "amFreqDecay": 0.489796,
+    "fmGainMaxValue": 0.204082,
+    "fmGainAttack": 0.836735,
+    "fmGainDecay": 0.734694,
+    "amGainMaxValue": 0.77551,
+    "amGainAttack": 0.428571,
+    "amGainDecay": 0.142857
   },
 
   //common-muckoink 0.0204082 0.8 0.0816327 0.0204082 0.001 0.99 0.0204082 0.01 1 1 0.142857 0.734694 1 0.0612245 0.530612
   "common-muckoink": {
-    "ifrq": 0.0204082,
-    "atk": 0.8,
-    "dcy": 0.0816327,
-    "fmod1": 0.0204082,
-    "atkf1": 0.001,
-    "dcyf1": 0.99,
-    "fmod2": 0.0204082,
-    "atkf2": 0.01,
-    "dcyf2": 1,
-    "amod1": 1,
-    "atka1": 0.142857,
-    "dcya1": 0.734694,
-    "amod2": 1,
-    "atka2": 0.0612245,
-    "dcya2": 0.530612
+    "frequency": 0.0204082,
+    "globalAttack": 0.8,
+    "globalDecay": 0.0816327,
+    "fmFreqMaxValue": 0.0204082,
+    "fmFreqAttack": 0.001,
+    "fmFreqDecay": 0.99,
+    "amFreqMaxValue": 0.0204082,
+    "amFreqAttack": 0.01,
+    "amFreqDecay": 1,
+    "fmGainMaxValue": 1,
+    "fmGainAttack": 0.142857,
+    "fmGainDecay": 0.734694,
+    "amGainMaxValue": 1,
+    "amGainAttack": 0.0612245,
+    "amGainDecay": 0.530612
   }
 }
 
@@ -184,26 +184,26 @@ export class Bird {
 
   setup(parameters) {
     console.log(JSON.stringify(parameters, null, '\t' ));
-    this.setFrequency(parameters.ifrq)
+    this.setFrequency(parameters.frequency)
 
-    this.mainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.atk;
-    this.mainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.dcy;
+    this.mainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.attack;
+    this.mainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.decay;
 
-    this.fmFrequencyEnvelope.maxValue = ENVELOPE_FREQ_MULTIPLIER*parameters.fmod1;
-    this.fmFrequencyEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.atkf1;
-    this.fmFrequencyEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.dcyf1;
+    this.fmFrequencyEnvelope.maxValue = ENVELOPE_FREQ_MULTIPLIER*parameters.fmFreqMaxValue;
+    this.fmFrequencyEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.fmFreqAttack;
+    this.fmFrequencyEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.fmFreqDecay;
 
-    this.amFrequencyEnvelope.maxValue = ENVELOPE_FREQ_MULTIPLIER*parameters.fmod2;
-    this.amFrequencyEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.atkf2;
-    this.amFrequencyEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.dcyf2;
+    this.amFrequencyEnvelope.maxValue = ENVELOPE_FREQ_MULTIPLIER*parameters.amFreqMaxValue;
+    this.amFrequencyEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.amFreqAttack;
+    this.amFrequencyEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.amFreqDecay;
 
-    this.fmGainEnvelope.maxValue = parameters.amod1;
-    this.fmGainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.atka1;
-    this.fmGainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.dcya1;
+    this.fmGainEnvelope.maxValue = parameters.fmGainMaxValue;
+    this.fmGainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.fmGainAttack;
+    this.fmGainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.fmGainDecay;
 
-    this.amGainEnvelope.maxValue = -parameters.amod2;
-    this.amGainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.atka2;
-    this.amGainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.dcya2;
+    this.amGainEnvelope.maxValue = -parameters.amGainMaxValue;
+    this.amGainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.amGainAttack;
+    this.amGainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.amGainDecay;
 
   }
 
