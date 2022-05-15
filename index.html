@@ -111,7 +111,6 @@
 			//var trigButton=document.getElementById("triggerButton");
 			function chirp(caller, time){
 				var b = birds[count];
-				console.log(JSON.stringify(params, null, '\t' ));
 				//console.log(caller);
 				if(rIfqr.value.v && !caller){
 					params.ifrq = initifrq + (rnd_snd()*0.01);
@@ -127,6 +126,7 @@
 				b.position = {x:tp0.value1.v-tp0.max/2, y: 0, z: (40-tp0.value2.v*10)};
 				b.velocity = {x:(Math.random()-0.5)*10, y: 0, z: 0};
 				//console.log(tp0);
+				console.log(JSON.stringify(params, null, '\t' ));
 				b.applyParams(params);
 				b.chirp(time);
 				count = (count+1) % birds.length;

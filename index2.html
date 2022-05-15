@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Chirrrrp</title>
+  <script type="module" >
+    import {Bird, PRESETS} from './birds.js';
+    var setup = false;
+    var audioContext, bird;
+    window.addEventListener('load', () => {
+      document.getElementById("chirp").addEventListener("click", () => {
+        if (!setup){
+          audioContext = new AudioContext();
+          bird = new Bird(audioContext);
+          bird.setup(PRESETS["lesser-spotted-grinchwarbler"]);
+          // bird.setup(PRESETS["speckled-throated-spew"]);
+          bird.connect(audioContext.destination)
+        }
+        bird.chirp();
+      });
+    })
+
+  </script>
+</head>
+<body>
+  <button id="chirp">CHRIP</button>
+</body>
+</html>
