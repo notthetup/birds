@@ -158,7 +158,7 @@ export const PRESETS = {
 }
 
 export class Bird {
-  constructor(audioContext) {
+  constructor(audioContext, type="lesser-spotted-grinchwarbler") {
     this.audioContext = audioContext
     this.am = new BirdAM(audioContext);
     this.fm = new BirdFM(audioContext);
@@ -172,6 +172,12 @@ export class Bird {
     this.amFrequencyEnvelope = new EnvelopeADSR(audioContext, this.am.getModulatorFrequency());
     this.fmGainEnvelope = new EnvelopeADSR(audioContext, this.fm.getModulatorGain());
     this.amGainEnvelope = new EnvelopeADSR(audioContext, this.am.getModulatorGain());
+
+    if ( Object.keys(PRESETS).find(key => key === type) ) this.setParameters(PRESETS[type]);
+    else {
+      console.error("Bird type not found in presets: " + type);
+      this.type = "unknown";
+    }
   }
 
   connect(destination) {
@@ -182,7 +188,7 @@ export class Bird {
     this.outputGain.disconnect()
   }
 
-  setup(parameters) {
+  setParameters(parameters) {
     console.log(JSON.stringify(parameters, null, '\t' ));
     this.setFrequency(parameters.frequency)
 
