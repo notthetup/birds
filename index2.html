@@ -15,8 +15,8 @@
         if (!setup){
           let audioContext = new AudioContext();
           bird = new Bird(audioContext);
-          // bird.setup(PRESETS["lesser-spotted-grinchwarbler"]);
-          bird.setup(PRESETS["triple-tailed-tree-troubler"]);
+          bird.setup(PRESETS["lesser-spotted-grinchwarbler"]);
+          // bird.setup(PRESETS["triple-tailed-tree-troubler"]);
           bird.connect(audioContext.destination)
         }
         bird.chirp();

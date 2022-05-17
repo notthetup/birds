@@ -186,8 +186,8 @@ export class Bird {
     console.log(JSON.stringify(parameters, null, '\t' ));
     this.setFrequency(parameters.frequency)
 
-    this.mainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.attack;
-    this.mainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.decay;
+    this.mainEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.globalAttack;
+    this.mainEnvelope.decayTime = MAX_ATTACK_DECAY_TIME*parameters.globalDecay;
 
     this.fmFrequencyEnvelope.maxValue = ENVELOPE_FREQ_MULTIPLIER*parameters.fmFreqMaxValue;
     this.fmFrequencyEnvelope.attackTime = MAX_ATTACK_DECAY_TIME*parameters.fmFreqAttack;
